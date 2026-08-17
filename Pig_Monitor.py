@@ -1,13 +1,9 @@
-import numpy as np
 import pandas as pd
 import xlsxwriter
 import os
 import calendar
-import time
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-# import matplotlib.style as mplstyle
-import matplotlib.pyplot as plt
 
 
 # input the data from the input sheets
