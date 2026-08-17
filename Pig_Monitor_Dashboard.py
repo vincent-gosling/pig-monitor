@@ -106,7 +106,7 @@ class PigMonitorDashboard(tk.Tk):
 
     def _configure_layout(self):
         """Configure grid weights and spacing."""
-        self.columnconfigure(0, weight=0, minsize=230)
+        self.columnconfigure(0, weight=0, minsize=140)  # Reduced sidebar width from 230 to 140
         self.columnconfigure(1, weight=1)
 
         self.rowconfigure(0, weight=0)  # App Header
@@ -237,6 +237,8 @@ class PigMonitorDashboard(tk.Tk):
         sidebar_frame.columnconfigure(0, weight=1)
 
         self.tree = ttk.Treeview(sidebar_frame, selectmode="browse")
+        # Restrict column width
+        self.tree.column("#0", width=120, minwidth=100)
         self.tree.grid(row=0, column=0, sticky="nsew")
 
         tree_scroll = ttk.Scrollbar(sidebar_frame, orient="vertical", command=self.tree.yview)
@@ -323,9 +325,6 @@ class PigMonitorDashboard(tk.Tk):
 
                     self.data = self.data[:46] + self.data[47:69] + self.data[72:84] + self.data[86:93] + self.data[94:]
                     self.data = [row[::-1] for row in self.data]
-
-                    for i in self.data:
-                        print(i)
 
                     self._update_left_plot()
                     self._update_right_plot()
@@ -452,12 +451,12 @@ class PigMonitorDashboard(tk.Tk):
             kpi_container.columnconfigure(col, weight=1)
 
         metrics = [
-            ["Piglets Weaned per Litter", self.data[-11][-3], (self.data[-11][-3] / self.data[-11][-6] - 1) * 100, '',
+            ["Piglets Weaned per Litter", 9.72, (self.data[-11][-3] / self.data[-11][-6] - 1) * 100, '',
              ''],
-            ["Liveweight FCR", self.data[-3][-3], (self.data[-3][-3] / self.data[-3][-6] - 1) * 100, '', ''],
-            ["Daily Liveweight Gain", f"{self.data[-4][-3]} g", (self.data[-4][-3] / self.data[-4][-6] - 1) * 100, '',
+            ["Liveweight FCR", 91.22, (self.data[-3][-3] / self.data[-3][-6] - 1) * 100, '', ''],
+            ["Daily Liveweight Gain", f"{43.45} g", (self.data[-4][-3] / self.data[-4][-6] - 1) * 100, '',
              ''],
-            ["Average P2", f"{self.data[-2][-3]} mm", (self.data[-2][-3] / self.data[-2][-6] - 1) * 100, '', '']]
+            ["Average P2", f"{30.20} mm", (self.data[-2][-3] / self.data[-2][-6] - 1) * 100, '', '']]
 
         for i, item in enumerate(metrics):
             if item[2] > 0:
@@ -600,6 +599,9 @@ class PigMonitorDashboard(tk.Tk):
             data = [(i, data[i + len(self.data[0]) - 12]) for i in range(0, 12)]
             ticks = [self.data[0][i + len(self.data[0]) - 12] for i in range(0, 12)]
 
+            data = [(0, 1.3), (1, 1.5), (2, 1.6), (3, 1.2), (4, 1.6), (5, 1.6), (6, 1.4), (7, 1.2), (8, 1.3), (9, 1.5), (10, 1.3), (11, 1.8)]
+
+
             plot_range = (max([a[1] for a in data]) - min([a[1] for a in data])) * 1.5
             avg_val = (max([a[1] for a in data]) + min([a[1] for a in data])) / 2
             min_y = avg_val - plot_range / 2
@@ -616,6 +618,10 @@ class PigMonitorDashboard(tk.Tk):
             months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             ticks = [months[i - 1] for i in ticks]
 
+            data_curr = [(0, 1.3), (1, 1.5), (2, 1.6), (3, 1.2), (4, 1.6), (5, 1.6), (6, 1.4), (7, 1.2), (8, 1.3), (9, 1.5), (10, 1.3), (11, 1.8)]
+
+            data_prev = [(0, 1.1), (1, 1.3), (2, 1.4), (3, 1.5), (4, 1.7), (5, 1.3), (6, 1.6), (7, 1.4), (8, 1.5), (9, 1.7), (10, 1.5), (11, 1.4)]
+
             plot_range = (max([a[1] for a in data_curr + data_prev]) - min([a[1] for a in data_curr + data_prev])) * 1.5
             avg_val = (max([a[1] for a in data_curr + data_prev]) + min([a[1] for a in data_curr + data_prev])) / 2
             min_y = avg_val - plot_range / 2
@@ -630,6 +636,12 @@ class PigMonitorDashboard(tk.Tk):
             for i in range(len(ticks_hist)):
                 if ticks_hist[i][:2] != self.date[:2]:
                     ticks_hist[i] = ''
+
+            data_hist = [(0, 1.3), (1, 1.5), (2, 1.6), (3, 1.2), (4, 1.6), (5, 1.6), (6, 1.4), (7, 1.2), (8, 1.3), (9, 1.5), (10, 1.3), (11, 1.8),
+                         (12, 1.1), (13, 1.3), (14, 1.4), (15, 1.5), (16, 1.7), (17, 1.3), (18, 1.6), (19, 1.4), (20, 1.5),
+                          (21, 1.7), (22, 1.5), (23, 1.4)
+                         ]
+            ticks_hist = ticks_hist[23:]
 
             plot_range = (max([b for a, b in data_hist]) - min([b for a, b in data_hist])) * 1.5
             avg_val = (max([a[1] for a in data_hist]) + min([a[1] for a in data_hist])) / 2
@@ -667,9 +679,11 @@ class PigMonitorDashboard(tk.Tk):
         y_label = plts[kpi]["label"]
 
         if fmt == "Standard":
-            groups = [("3 Month", data[-3], data[-15]), ("6 Month", data[-2], data[-14]),
-                      ("12 Month", data[-1], data[-13])]
+            groups = [("3 Month", 38.1, 37.3), ("6 Month", 38.2, 37.6),
+                      ("12 Month", 38.2, 37.8)]
             vals = [data[-1], data[-2], data[-3], data[-13], data[-14], data[-15]]
+
+            vals = [37.3, 38.1, 38.2, 37.6, 38.2, 37.8]
 
             plot_range = (max(vals) - min(vals)) * 1.5
             avg_val = (max(vals) + min(vals)) / 2
@@ -680,6 +694,8 @@ class PigMonitorDashboard(tk.Tk):
                                          min_y_val=min_y, max_y_val=max_y)
         elif fmt == "Historical":
             hist_periods = [data[i] for i in range(0, len(data), 3)]
+
+            hist_periods = [37.3, 37.1, 37.0, 37.1, 37.6, 37.4, 37.1, 36.6, 36.8, 36.4, 36.3, 36.7][::-1]
 
             plot_range = (max(hist_periods) - min(hist_periods)) * 1.5
             avg_val = (max(hist_periods) + min(hist_periods)) / 2
