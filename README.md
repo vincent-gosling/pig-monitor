@@ -8,6 +8,10 @@ Data Pipeline: Engineered an end-to-end ETL pipeline using Pandas, Os and XlsxWr
 
 User Interface: Designed a GUI using Tkinter, including functions to create new reports, a treeview to view previous reports and input sheets, KPI metric cards and customisable plot visuals built straight onto the dashboard.
 
+![Alt Text](https://github.com/vincent-gosling/pig-monitor/blob/main/1786970987741.jpg?raw=true)
+
+NOTE: All data displayed in this image has been modified to maintain confidentiality, for the same reason there are no data files available in the repository.
+
 Desktop Access: currently the project only runs the raw python code and uses a .bat file placed in the users desktop to allow a non-technical user to run the application.
 
 ## Repository Structure
