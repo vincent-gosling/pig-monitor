@@ -16,12 +16,13 @@ Desktop Access: currently the project only runs the raw python code and uses a .
 
 ## Repository Structure
 
+<pre>
 ├── Pig_Monitor.py               # Data processing and report writing script  
 ├── Pig_Monitor_Dashboard.py     # Tkinter dashboard, visualisations and data input script  
 ├── LICENSE                      # License file  
 ├── .gitignore                   # Git ignore configuration  
 └── README.md                    # Project documentation  
-
+</pre>
 
 ## Future changes
 
